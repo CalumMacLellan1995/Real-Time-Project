@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -9,8 +9,11 @@
 
 int main(int argc, char* argv[])
 {
-
-  static const int plotDataSize = 100;
+  int value=10;
+  // printf("Bitch enter a number: \n");
+  //  scanf("%d", &value);
+  
+  static const int plotDataSize = 10;
   double yData[plotDataSize];
   double xData[plotDataSize];
   
@@ -42,15 +45,17 @@ int main(int argc, char* argv[])
   for (int index=0; index<plotDataSize; ++index)
     {
       xData[index]=index;
-      yData[index]=sin(M_PI*index/50);
-    }
+  
+      yData[index]=value;
+      // yData[index]=sin(M_PI*index/50);
+    }    
+      
+      curve->setSamples(xData, yData, plotDataSize);
+      curve->attach(plot);
 
-  curve->setSamples(xData, yData, plotDataSize);
-  curve->attach(plot);
-
-  plot->replot();
-  plot->show();
-
+      plot->replot();
+      plot->show();
+      
 
   
   //Creating main layout window
