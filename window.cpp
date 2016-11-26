@@ -41,8 +41,8 @@ Window::Window() : gain(5), count(0)
 	button3 = new QPushButton("Hygrophyte");
 
         connect( button1, SIGNAL(clicked()), SLOT(setThresholds()) );
-	//connect( button2, SIGNAL(clicked()), SLOT(setThreshold1()) );
-	//connect( button3, SIGNAL(clicked()), SLOT(setThreshold1()) );
+	connect( button2, SIGNAL(clicked()), SLOT(setThresholds1()) );
+	connect( button3, SIGNAL(clicked()), SLOT(setThresholds2()) );
 	
 	// make a plot curve from the data and attach it to the plot
 	curve->setSamples(xData, yData, plotDataSize);
@@ -92,6 +92,7 @@ void Window::timerEvent( QTimerEvent * )
   //	double inVal = gain * sin( M_PI * count/50.0 );
   double inVal = rand()%50+1;
   double inVal1 = thresholdLow;
+
   //  ++count;
 
 	// add the new input to the plot
@@ -127,5 +128,17 @@ void Window::setGain(double gain)
 int Window::setThresholds()
 {
   thresholdLow = 30;
+  return thresholdLow;
+}
+
+int Window::setThresholds1()
+{
+  thresholdLow = 40;
+  return thresholdLow;
+}
+
+int Window::setThresholds2()
+{
+  thresholdLow = 50;
   return thresholdLow;
 }

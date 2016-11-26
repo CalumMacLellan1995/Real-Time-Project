@@ -28,6 +28,9 @@ public:
 public slots:
 	void setGain(double gain);
 	int setThresholds();
+	int setThresholds1();
+	int setThresholds2();
+	
 
 // internal variables for the window class
 private:
