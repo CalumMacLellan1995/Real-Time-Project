@@ -1,18 +1,19 @@
 #include "window.h"
 // #include "adcreader.h"
-
+#include <ctime>
 #include <cmath>  // for sine stuff
 
 
 Window::Window() : gain(5), count(0)
 {
+ 
 	knob = new QwtKnob;
 	// set up the gain knob
 	knob->setValue(gain);
-
+	//gain = setGain();
 	// use the Qt signals/slots framework to update the gain -
 	// every time the knob is moved, the setGain function will be called
-	connect( knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
+     	connect( knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
 
 	// set up the thermometer
 	thermo = new QwtThermo; 
@@ -26,14 +27,21 @@ Window::Window() : gain(5), count(0)
 	{
 		xData[index] = index;
 		yData[index] = gain * sin( M_PI * index/50 );
+		y1Data[index]=gain;
 	}
 
 	curve = new QwtPlotCurve;
+	curve->setPen(QPen(Qt::green,2));
+	curve1= new QwtPlotCurve;
+	curve1->setPen(QPen(Qt::red,2));
+	
 	plot = new QwtPlot;
 	// make a plot curve from the data and attach it to the plot
 	curve->setSamples(xData, yData, plotDataSize);
+	curve->setSamples(xData,yData,plotDataSize);
 	curve->attach(plot);
-
+	curve1->attach(plot);
+	
 	plot->replot();
 	plot->show();
 
@@ -69,14 +77,25 @@ Window::~Window() {
 
 void Window::timerEvent( QTimerEvent * )
 {
-	double inVal = gain * sin( M_PI * count/50.0 );
-	++count;
+  
+  //	double inVal = gain * sin( M_PI * count/50.0 );
+  double inVal = rand()%50+1;
+  double inVal1 =gain;
+  //  ++count;
 
 	// add the new input to the plot
 	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
 	yData[plotDataSize-1] = inVal;
 	curve->setSamples(xData, yData, plotDataSize);
+
+	memmove( y1Data, y1Data+1, (plotDataSize-1) * sizeof(double) );
+	y1Data[plotDataSize-1] = inVal1;
+	curve1->setSamples(xData, y1Data, plotDataSize);
+       
+	
+	
 	plot->replot();
+	
 
 	// set the thermometer value
 	thermo->setValue( inVal + 10 );
@@ -86,6 +105,10 @@ void Window::timerEvent( QTimerEvent * )
 // this function can be used to change the gain of the A/D internal amplifier
 void Window::setGain(double gain)
 {
-	// for example purposes just change the amplitude of the generated input
-	this->gain = gain;
+//srand(time(0));
+
+//gain=rand()%50+1;
+  // for example purposes just change the amplitude of the generated input
+  
+  this->gain = gain;
 }
