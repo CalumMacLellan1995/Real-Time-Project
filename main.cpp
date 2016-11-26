@@ -4,15 +4,15 @@
 
 int main(int argc, char *argv[])
 {
-	QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-	// create the window
-	Window window;
-	window.showMaximized();
+  // create the window
+  Window window;
+  window.showMaximized();
 
-	// call the window.timerEvent function every 40 ms
-       	window.startTimer(40);
+  // call the window.timerEvent function every 40 ms
+  window.startTimer(40);
 
-	// execute the application
-	return app.exec();
+  // execute the application
+  return app.exec();
 }

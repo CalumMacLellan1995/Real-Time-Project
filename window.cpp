@@ -6,7 +6,7 @@
 
 Window::Window() : gain(5), count(0)
 {
- 
+  
 	knob = new QwtKnob;
 	// set up the gain knob
 	knob->setValue(gain);
@@ -26,30 +26,41 @@ Window::Window() : gain(5), count(0)
 	for( int index=0; index<plotDataSize; ++index )
 	{
 		xData[index] = index;
-		yData[index] = gain * sin( M_PI * index/50 );
+		yData[index] =10;
 		y1Data[index]=gain;
+		y2Data[index]=gain-1;
 	}
 
 	curve = new QwtPlotCurve;
 	curve->setPen(QPen(Qt::green,2));
 	curve1= new QwtPlotCurve;
 	curve1->setPen(QPen(Qt::red,2));
+	curve2 = new QwtPlotCurve;
+	curve2->setPen(QPen(Qt::blue,2));
 	
 	plot = new QwtPlot;
 	button1 = new QPushButton("Xerophyte");
 	button2 = new QPushButton("Mesophyte");
 	button3 = new QPushButton("Hygrophyte");
-
+	
+	
         connect( button1, SIGNAL(clicked()), SLOT(setThresholds()) );
 	connect( button2, SIGNAL(clicked()), SLOT(setThresholds1()) );
 	connect( button3, SIGNAL(clicked()), SLOT(setThresholds2()) );
+
+	connect( button1, SIGNAL(clicked()), SLOT(setThresholdsH()) );
+	connect( button2, SIGNAL(clicked()), SLOT(setThresholdsH1()) );
+	connect( button3, SIGNAL(clicked()), SLOT(setThresholdsH2()) );
 	
 	// make a plot curve from the data and attach it to the plot
 	curve->setSamples(xData, yData, plotDataSize);
-	curve->setSamples(xData,yData,plotDataSize);
+	curve1->setSamples(xData,y1Data,plotDataSize);
+	curve2->setSamples(xData,y2Data,plotDataSize);
+      
 	curve->attach(plot);
 	curve1->attach(plot);
-	
+	curve2->attach(plot);	
+
 	plot->replot();
 	plot->show();
 
@@ -90,11 +101,21 @@ void Window::timerEvent( QTimerEvent * )
 {
   
   //	double inVal = gain * sin( M_PI * count/50.0 );
-  double inVal = rand()%50+1;
-  double inVal1 = thresholdLow;
+  double inVal = 10;
+  double inVal1 = threshLow;
+  double inVal2 = threshHigh;
 
-  //  ++count;
-
+  if (inVal < inVal1)
+    {
+      inVal = threshHigh;
+      count = threshHigh;
+    }
+  else
+    {
+      
+      inVal =count;
+      --count;
+    }
 	// add the new input to the plot
 	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
 	yData[plotDataSize-1] = inVal;
@@ -104,6 +125,9 @@ void Window::timerEvent( QTimerEvent * )
 	y1Data[plotDataSize-1] = inVal1;
 	curve1->setSamples(xData, y1Data, plotDataSize);
        
+	memmove( y2Data, y2Data+1, (plotDataSize-1) * sizeof(double) );
+	y2Data[plotDataSize-1] = inVal2;
+	curve2->setSamples(xData, y2Data, plotDataSize);
 	
 	
 	plot->replot();
@@ -127,18 +151,47 @@ void Window::setGain(double gain)
 
 int Window::setThresholds()
 {
-  thresholdLow = 30;
-  return thresholdLow;
+  
+  threshLow = 30;
+  return threshLow;
 }
 
 int Window::setThresholds1()
 {
-  thresholdLow = 40;
-  return thresholdLow;
+ 
+  threshLow = 40;
+  return threshLow;
+  
 }
 
 int Window::setThresholds2()
 {
-  thresholdLow = 50;
-  return thresholdLow;
+  
+  threshLow = 50;
+  return threshLow;
+  
 }
+
+int Window::setThresholdsH()
+{
+
+  threshHigh = 35;
+  return threshHigh;
+  
+}
+
+int Window::setThresholdsH1()
+{
+
+  threshHigh = 45;
+  return threshHigh;
+  
+}
+
+int Window::setThresholdsH2()
+{
+
+  threshHigh = 55;
+  return threshHigh;
+}
+

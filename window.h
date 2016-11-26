@@ -15,52 +15,58 @@
 // class definition 'Window'
 class Window : public QWidget
 {
-	// must include the Q_OBJECT macro for for the Qt signals/slots framework to work with this class
-	Q_OBJECT
+  // must include the Q_OBJECT macro for for the Qt signals/slots framework to work with this class
+  Q_OBJECT
 
-public:
-	Window(); // default constructor - called when a Window is declared without arguments
+ public:
+  Window(); // default constructor - called when a Window is declared without arguments
 
-	~Window();
+  ~Window();
 
-	void timerEvent( QTimerEvent * );
+  void timerEvent( QTimerEvent * );
 
-public slots:
-	void setGain(double gain);
-	int setThresholds();
-	int setThresholds1();
-	int setThresholds2();
-	
+  public slots:
+    void setGain(double gain);
+    int setThresholds();
+    int setThresholds1();
+    int setThresholds2();
 
-// internal variables for the window class
-private:
-	QwtKnob      *knob;
-	QwtThermo    *thermo;
-	QwtPlot      *plot;
-	QwtPlotCurve *curve;
-	QwtPlotCurve *curve1;
-	
-	QPushButton *button1;
-	QPushButton *button2;
-	QPushButton *button3;
+    int setThresholdsH();
+    int setThresholdsH1();
+    int setThresholdsH2();
+    
 
-	
-	// layout elements from Qt itself http://qt-project.org/doc/qt-4.8/classes.html
-	QVBoxLayout  *vLayout;  // vertical layout
-	QHBoxLayout  *hLayout;  // horizontal layout
+    // internal variables for the window class
+ private:
+    QwtKnob      *knob;
+    QwtThermo    *thermo;
+    QwtPlot      *plot;
+    QwtPlotCurve *curve;
+    QwtPlotCurve *curve1;
+    QwtPlotCurve *curve2;
+    
+    QPushButton *button1;
+    QPushButton *button2;
+    QPushButton *button3;
 
-	static const int plotDataSize = 100;
 
-	// data arrays for the plot
-	double xData[plotDataSize];
-	double yData[plotDataSize];
-	double y1Data[plotDataSize];
-	
-	double gain;
-	int count;
-	int thresholdLow;
+    // layout elements from Qt itself http://qt-project.org/doc/qt-4.8/classes.html
+    QVBoxLayout  *vLayout;  // vertical layout
+    QHBoxLayout  *hLayout;  // horizontal layout
 
-//	ADCreader *adcreader;
+    static const int plotDataSize = 100;
+
+    // data arrays for the plot
+    double xData[plotDataSize];
+    double yData[plotDataSize];
+    double y1Data[plotDataSize];
+    double y2Data[plotDataSize];
+    
+    double gain;
+    int count;
+    int threshLow;
+    int threshHigh;
+    //ADCreader *adcreader;
 };
 
 #endif // WINDOW_H
