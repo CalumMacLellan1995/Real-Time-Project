@@ -41,8 +41,8 @@ Window::Window() : gain(5), count(0)
 	button3 = new QPushButton("Hygrophyte");
 
         connect( button1, SIGNAL(clicked()), SLOT(setThresholds()) );
-	//connect( button2, SIGNAL(clicked()), SLOT(setThreshold1()) );
-	//connect( button3, SIGNAL(clicked()), SLOT(setThreshold1()) );
+	connect( button2, SIGNAL(clicked()), SLOT(setThreshold1()) );
+	connect( button3, SIGNAL(clicked()), SLOT(setThreshold1()) );
 	
 	// make a plot curve from the data and attach it to the plot
 	curve->setSamples(xData, yData, plotDataSize);

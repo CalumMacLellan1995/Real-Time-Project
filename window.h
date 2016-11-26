@@ -1,6 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <QPushButton>
 #include <QPen>
 #include <qwt/qwt_thermo.h>
 #include <qwt/qwt_knob.h>
@@ -26,6 +27,7 @@ public:
 
 public slots:
 	void setGain(double gain);
+	int setThresholds();
 
 // internal variables for the window class
 private:
@@ -34,6 +36,11 @@ private:
 	QwtPlot      *plot;
 	QwtPlotCurve *curve;
 	QwtPlotCurve *curve1;
+	
+	QPushButton *button1;
+	QPushButton *button2;
+	QPushButton *button3;
+
 	
 	// layout elements from Qt itself http://qt-project.org/doc/qt-4.8/classes.html
 	QVBoxLayout  *vLayout;  // vertical layout
@@ -48,6 +55,7 @@ private:
 	
 	double gain;
 	int count;
+	int thresholdLow;
 
 //	ADCreader *adcreader;
 };
