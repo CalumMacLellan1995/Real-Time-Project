@@ -30,22 +30,22 @@ static const uint qt_meta_data_Window[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-       7,   23,   28,   28, 0x0a,
-      29,   28,   45,   28, 0x0a,
-      49,   28,   45,   28, 0x0a,
-      66,   28,   45,   28, 0x0a,
-      83,   28,   45,   28, 0x0a,
-     100,   28,   45,   28, 0x0a,
-     118,   28,   45,   28, 0x0a,
+       7,   23,   24,   23, 0x0a,
+      28,   23,   24,   23, 0x0a,
+      45,   23,   24,   23, 0x0a,
+      62,   23,   24,   23, 0x0a,
+      79,   23,   24,   23, 0x0a,
+      97,   23,   24,   23, 0x0a,
+     115,   23,   24,   23, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_Window[] = {
-    "Window\0setGain(double)\0gain\0\0"
-    "setThresholds()\0int\0setThresholds1()\0"
-    "setThresholds2()\0setThresholdsH()\0"
-    "setThresholdsH1()\0setThresholdsH2()\0"
+    "Window\0setThresholds()\0\0int\0"
+    "setThresholds1()\0setThresholds2()\0"
+    "setThresholdsH()\0setThresholdsH1()\0"
+    "setThresholdsH2()\0water()\0"
 };
 
 void Window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -54,18 +54,19 @@ void Window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         Q_ASSERT(staticMetaObject.cast(_o));
         Window *_t = static_cast<Window *>(_o);
         switch (_id) {
-        case 0: _t->setGain((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 1: { int _r = _t->setThresholds();
+        case 0: { int _r = _t->setThresholds();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 2: { int _r = _t->setThresholds1();
+        case 1: { int _r = _t->setThresholds1();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 3: { int _r = _t->setThresholds2();
+        case 2: { int _r = _t->setThresholds2();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 4: { int _r = _t->setThresholdsH();
+        case 3: { int _r = _t->setThresholdsH();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 5: { int _r = _t->setThresholdsH1();
+        case 4: { int _r = _t->setThresholdsH1();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 6: { int _r = _t->setThresholdsH2();
+        case 5: { int _r = _t->setThresholdsH2();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 6: { int _r = _t->water();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
         default: ;
         }

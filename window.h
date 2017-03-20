@@ -1,13 +1,14 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <QLabel>
 #include <QPushButton>
 #include <QPen>
 #include <qwt/qwt_thermo.h>
 #include <qwt/qwt_knob.h>
 #include <qwt/qwt_plot.h>
 #include <qwt/qwt_plot_curve.h>
-
+#include <QProgressBar>
 #include <QBoxLayout>
 
 // #include "adcreader.h"
@@ -26,7 +27,7 @@ class Window : public QWidget
   void timerEvent( QTimerEvent * );
 
   public slots:
-    void setGain(double gain);
+    //    void setGain(double gain);
     int setThresholds();
     int setThresholds1();
     int setThresholds2();
@@ -35,21 +36,24 @@ class Window : public QWidget
     int setThresholdsH1();
     int setThresholdsH2();
     
-
+    int water();
     // internal variables for the window class
  private:
-    QwtKnob      *knob;
-    QwtThermo    *thermo;
+    //QwtKnob      *knob;
+    //QwtThermo    *thermo;
     QwtPlot      *plot;
     QwtPlotCurve *curve;
     QwtPlotCurve *curve1;
     QwtPlotCurve *curve2;
-    
+
+    QPushButton *button0;
     QPushButton *button1;
     QPushButton *button2;
     QPushButton *button3;
-
-
+    
+    QLabel *Label1; 
+    QProgressBar *bar1;
+    
     // layout elements from Qt itself http://qt-project.org/doc/qt-4.8/classes.html
     QVBoxLayout  *vLayout;  // vertical layout
     QHBoxLayout  *hLayout;  // horizontal layout
@@ -66,6 +70,7 @@ class Window : public QWidget
     int count;
     int threshLow;
     int threshHigh;
+    static const int WaterValue=60;
     //ADCreader *adcreader;
 };
 

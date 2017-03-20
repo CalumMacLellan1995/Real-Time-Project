@@ -7,21 +7,21 @@
 Window::Window() : gain(5), count(0)
 {
   
-	knob = new QwtKnob;
+  //knob = new QwtKnob;
 	// set up the gain knob
-	knob->setValue(gain);
+  //	knob->setValue(gain);
 	//gain = setGain();
 	// use the Qt signals/slots framework to update the gain -
 	// every time the knob is moved, the setGain function will be called
-     	connect( knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
+  // 	connect( knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
 
 	// set up the thermometer
-	thermo = new QwtThermo; 
-	thermo->setFillBrush( QBrush(Qt::red) );
+  //	thermo = new QwtThermo; 
+  //	thermo->setFillBrush( QBrush(Qt::red) );
 	//thermo->setRange(0, 20);
-	thermo->show();
+  //	thermo->show();
 
-	printf("hello");
+  //	printf("hello");
 	// set up the initial plot data
 	for( int index=0; index<plotDataSize; ++index )
 	{
@@ -39,15 +39,18 @@ Window::Window() : gain(5), count(0)
 	curve2->setPen(QPen(Qt::blue,2));
 	
 	plot = new QwtPlot;
+	button0 = new QPushButton("Water Plants" );
 	button1 = new QPushButton("Xerophyte");
 	button2 = new QPushButton("Mesophyte");
 	button3 = new QPushButton("Hygrophyte");
+	Label1 = new QLabel(this);
+	bar1 = new QProgressBar(this);
 	
-	
+	connect( button0, SIGNAL(clicked()), SLOT(water()));     
         connect( button1, SIGNAL(clicked()), SLOT(setThresholds()) );
 	connect( button2, SIGNAL(clicked()), SLOT(setThresholds1()) );
 	connect( button3, SIGNAL(clicked()), SLOT(setThresholds2()) );
-
+	
 	connect( button1, SIGNAL(clicked()), SLOT(setThresholdsH()) );
 	connect( button2, SIGNAL(clicked()), SLOT(setThresholdsH1()) );
 	connect( button3, SIGNAL(clicked()), SLOT(setThresholdsH2()) );
@@ -67,7 +70,8 @@ Window::Window() : gain(5), count(0)
 
 	// set up the layout - knob above thermometer
 	vLayout = new QVBoxLayout;
-	vLayout->addWidget(knob);
+	vLayout->addWidget(Label1);
+	vLayout->addWidget(button0);
 	vLayout->addWidget(button1);
 	vLayout->addWidget(button2);
 	vLayout->addWidget(button3);
@@ -101,20 +105,20 @@ void Window::timerEvent( QTimerEvent * )
 {
   
   //	double inVal = gain * sin( M_PI * count/50.0 );
-  double inVal = 10;
+  double inVal = WaterValue-count; // rand()%50+1;
   double inVal1 = threshLow;
   double inVal2 = threshHigh;
-
-  if (inVal < inVal1)
+  ++count;
+  
+  if (inVal > inVal1 && inVal < inVal2)
     {
-      inVal = threshHigh;
-      count = threshHigh;
+      Label1->setText("Water level Good");
+      //      Label1->setAlignment(Qt::AlignLeft);
     }
   else
     {
-      
-      inVal =count;
-      --count;
+      Label1->setText("Water Plant NOW!");
+      // Label1->setAlignment(Qt::AlignLeft);
     }
 	// add the new input to the plot
 	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
@@ -133,12 +137,24 @@ void Window::timerEvent( QTimerEvent * )
 	plot->replot();
 	
 
-	// set the thermometer value
-	thermo->setValue( inVal + 10 );
+	if(inVal/inVal2 <=100)
+	  {// set the thermometer value
+	    bar1->setValue( inVal/inVal2 * 100 );
+	  }
+	else
+	  {
+	    bar1->setValue(100);
+	  }
+
+	if(inVal <= inVal1)
+	  {
+	    int water();
+	  }
 }
 
 
 // this function can be used to change the gain of the A/D internal amplifier
+/*
 void Window::setGain(double gain)
 {
 //srand(time(0));
@@ -148,18 +164,19 @@ void Window::setGain(double gain)
   
   this->gain = gain;
 }
+*/
 
 int Window::setThresholds()
 {
   
-  threshLow = 30;
+  threshLow = 10;
   return threshLow;
 }
 
 int Window::setThresholds1()
 {
  
-  threshLow = 40;
+  threshLow = 15;
   return threshLow;
   
 }
@@ -167,7 +184,7 @@ int Window::setThresholds1()
 int Window::setThresholds2()
 {
   
-  threshLow = 50;
+  threshLow = 20;
   return threshLow;
   
 }
@@ -195,3 +212,8 @@ int Window::setThresholdsH2()
   return threshHigh;
 }
 
+int Window::water()
+{
+  count = 0;
+  return count;
+}
