@@ -10,9 +10,10 @@ public:
 	ADCreader() {running = 0;};
 	void quit();
 	void run();
+	int getData();
 private:
 	bool running;
-
+	int output;
 };
 
 #endif

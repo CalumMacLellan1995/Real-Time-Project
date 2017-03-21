@@ -99,18 +99,18 @@ Window::Window() : gain(5), count(0)
 
 Window::~Window() {
 	// tells the thread to no longer run its endless loop
-  t.quit();
+        t.quit();
 	// wait until the run method has terminated
 //	adcreader->wait();
-//	delete adcreader;
+//	delete t;
 }
 
 void Window::timerEvent( QTimerEvent * )
 {
-  //int result = adcreader -> getData();
+  int result = t.getData();
   
   //	double inVal = gain * sin( M_PI * count/50.0 );
-  double inVal = 30; //result;//WaterValue-count; // rand()%50+1;
+  double inVal = result;//WaterValue-count; // rand()%50+1;
   
   double inVal1 = threshLow;
   double inVal2 = threshHigh;

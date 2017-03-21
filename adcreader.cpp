@@ -6,9 +6,9 @@ using namespace std;
 
   mcp3008Spi a2d("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
 //    int i = 60;
-    int a2dVal = 0;
-    int a2dChannel = 0;
-        unsigned char data[3];
+  int a2dVal = 0;
+  int a2dChannel = 0;
+  unsigned char data[3];
 
 
 void ADCreader::run()
@@ -26,7 +26,7 @@ void ADCreader::run()
             a2dVal = (data[1]<< 8) & 0b1100000000; //merge data[1] & data[2] to get result
             a2dVal |=  (data[2] & 0xff);
 	    //sleep(1);
-	    cout << "The Result is: " << a2dVal << endl;
+	    //	    cout << "The Result is: " << a2dVal << endl;
 	  //	qDebug() << "Tick";
 
 
@@ -42,5 +42,9 @@ void ADCreader::quit()
 	exit(0);
 }
 
-
+int ADCreader::getData()
+{
+  output = a2dVal;
+  return output;
+}
 
