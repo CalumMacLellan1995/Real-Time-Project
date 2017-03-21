@@ -1,5 +1,5 @@
 #include "window.h"
-// #include "adcreader.h"
+#include "adcreader.h"
 #include <ctime>
 #include <cmath>  // for sine stuff
 
@@ -66,8 +66,9 @@ Window::Window() : gain(5), count(0)
 
 	plot->replot();
 	plot->show();
-
-
+	
+	
+	
 	// set up the layout - knob above thermometer
 	vLayout = new QVBoxLayout;
 	vLayout->addWidget(Label1);
@@ -89,13 +90,15 @@ Window::Window() : gain(5), count(0)
 	// At the moment it doesn't do anything else than
 	// running in an endless loop and which prints out "tick"
 	// every second.
-//	adcreader = new ADCreader();
-//	adcreader->start();
+	//   	adcreader = new mcp3008Spi("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
+	//	adcreader -> start();
+    
+       
 }
 
 Window::~Window() {
 	// tells the thread to no longer run its endless loop
-//	adcreader->quit();
+  // adcreader->quit();
 	// wait until the run method has terminated
 //	adcreader->wait();
 //	delete adcreader;
@@ -103,13 +106,35 @@ Window::~Window() {
 
 void Window::timerEvent( QTimerEvent * )
 {
+  //int result = adcreader -> getData();
   
   //	double inVal = gain * sin( M_PI * count/50.0 );
-  double inVal = WaterValue-count; // rand()%50+1;
+  // double inVal = result;//WaterValue-count; // rand()%50+1;
+  
   double inVal1 = threshLow;
   double inVal2 = threshHigh;
-  ++count;
+
+  //++count;
+  mcp3008Spi a2d("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
+  // int i = 20;
+  int a2dVal = 0;
+  int a2dChannel = 0;
+  unsigned char data[3];
   
+      data[0] = 1;  //  first byte transmitted -> start bit
+      data[1] = 0b10000000 |( ((a2dChannel & 7) << 4)); // second byte transmitted -> (SGL/DIF = 1, D2=D1=D0=0)
+      data[2] = 0; // third byte transmitted....don't care
+
+      a2d.spiWriteRead(data, sizeof(data) );
+
+      a2dVal = 0;
+      a2dVal = (data[1]<< 8) & 0b1100000000; //merge data[1] & data[2] to get result
+      a2dVal |=  (data[2] & 0xff);
+      //sleep(1);
+      // cout << "The Result is: " << a2dVal << endl;
+      // i--;
+      double inVal = a2dVal;
+ 
   if (inVal > inVal1 && inVal < inVal2)
     {
       Label1->setText("Water level Good");
@@ -146,11 +171,12 @@ void Window::timerEvent( QTimerEvent * )
 	    bar1->setValue(100);
 	  }
        
-
+	/*
 	if(inVal < inVal1)
 	  {
 	    count =0;
 	  }
+	*/
 }
 
 
