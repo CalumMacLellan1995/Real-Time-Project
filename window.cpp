@@ -1,7 +1,10 @@
 #include "window.h"
 #include "adcreader.h"
 #include <ctime>
-#include <cmath>  // for sine stuff
+#include <cmath>
+#include "WateringThread.h"
+#include "wiringPi.h"
+// for sine stuff
 //#include "mcp3008Spi.h"
 
 Window::Window() : gain(5), count(0)
@@ -13,13 +16,7 @@ Window::Window() : gain(5), count(0)
 	//gain = setGain();
 	// use the Qt signals/slots framework to update the gain -
 	// every time the knob is moved, the setGain function will be called
-  // 	connect( knob, SIGNAL(valueChanged(double)), SLOT(setGain(double)) );
-
-	// set up the thermometer
-  //	thermo = new QwtThermo; 
-  //	thermo->setFillBrush( QBrush(Qt::red) );
-	//thermo->setRange(0, 20);
-  //	thermo->show();
+  // 	connect( knob, SIGNAL(valueChanged(double)), SLOT(setGai
 
   //	printf("hello");
 	// set up the initial plot data
@@ -31,6 +28,8 @@ Window::Window() : gain(5), count(0)
 		y2Data[index]=gain-1;
 	}
 
+	//wiringPiSetup () ;
+	//pinMode (0, OUTPUT) ;
 	curve = new QwtPlotCurve;
 	curve->setPen(QPen(Qt::green,2));
 	curve1= new QwtPlotCurve;
@@ -61,7 +60,7 @@ Window::Window() : gain(5), count(0)
 	curve2->setSamples(xData,y2Data,plotDataSize);
       
 	curve->attach(plot);
-	curve1->attach(plot);
+        curve1->attach(plot);
 	curve2->attach(plot);	
 
 	plot->replot();
@@ -93,6 +92,7 @@ Window::Window() : gain(5), count(0)
 	//   	adcreader = new mcp3008Spi("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
 	//	ADCreader t; 
 	t.start();
+	//d.start();
     
        
 }
@@ -100,6 +100,7 @@ Window::Window() : gain(5), count(0)
 Window::~Window() {
 	// tells the thread to no longer run its endless loop
         t.quit();
+	//d.quit();
 	// wait until the run method has terminated
 //	adcreader->wait();
 //	delete t;
@@ -107,6 +108,9 @@ Window::~Window() {
 
 void Window::timerEvent( QTimerEvent * )
 {
+  wiringPiSetup () ;
+  pinMode (1, OUTPUT) ;
+  
   int result = t.getData();
   
   //	double inVal = gain * sin( M_PI * count/50.0 );
@@ -136,6 +140,17 @@ void Window::timerEvent( QTimerEvent * )
       // i--;
       double inVal = a2dVal;
   */
+  
+  if (inVal >= inVal2)
+    {
+      digitalWrite (1, HIGH) ;
+    }
+  else if (inVal <= inVal1)
+    {
+      digitalWrite (1, LOW) ;
+    }
+ 
+      
   if (inVal > inVal1 && inVal < inVal2)
     {
       Label1->setText("Water level Good");
@@ -150,7 +165,7 @@ void Window::timerEvent( QTimerEvent * )
 	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
 	yData[plotDataSize-1] = inVal;
 	curve->setSamples(xData, yData, plotDataSize);
-
+	
 	memmove( y1Data, y1Data+1, (plotDataSize-1) * sizeof(double) );
 	y1Data[plotDataSize-1] = inVal1;
 	curve1->setSamples(xData, y1Data, plotDataSize);
@@ -197,7 +212,7 @@ void Window::setGain(double gain)
 int Window::setThresholds()
 {
   
-  threshLow = 10;
+  threshLow = 150;
   return threshLow;
 }
 
@@ -220,7 +235,7 @@ int Window::setThresholds2()
 int Window::setThresholdsH()
 {
 
-  threshHigh = 35;
+  threshHigh = 550;
   return threshHigh;
   
 }

@@ -11,6 +11,7 @@
 #include <QProgressBar>
 #include <QBoxLayout>
 #include "adcreader.h"
+#include "WateringThread.h"
 
 
 // class definition 'Window'
@@ -73,6 +74,7 @@ class Window : public QWidget
     int threshHigh;
     static const int WaterValue=60;
     ADCreader t;
+    WateringThread d;
 };
 
 #endif // WINDOW_H

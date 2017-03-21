@@ -8,8 +8,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = QwtExample
 
-LIBS += -lqwt -lm
+LIBS += -lqwt -lm -lwiringPi
 
 HEADERS += window.h adcreader.h mcp3008Spi.h
 
+# WateringThread.h
+
 SOURCES += main.cpp window.cpp adcreader.cpp mcp3008Spi.cpp
+
+# WateringThread.cpp
