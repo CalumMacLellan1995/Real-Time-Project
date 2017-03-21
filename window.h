@@ -12,6 +12,7 @@
 #include <QBoxLayout>
 #include "adcreader.h"
 
+
 // class definition 'Window'
 class Window : public QWidget
 {
@@ -19,6 +20,7 @@ class Window : public QWidget
   Q_OBJECT
 
  public:
+
   Window(); // default constructor - called when a Window is declared without arguments
 
   ~Window();
@@ -70,7 +72,7 @@ class Window : public QWidget
     int threshLow;
     int threshHigh;
     static const int WaterValue=60;
-    mcp3008Spi *adcreader;
+    ADCreader t;
 };
 
 #endif // WINDOW_H

@@ -2,7 +2,7 @@
 #include "adcreader.h"
 #include <ctime>
 #include <cmath>  // for sine stuff
-
+//#include "mcp3008Spi.h"
 
 Window::Window() : gain(5), count(0)
 {
@@ -91,14 +91,15 @@ Window::Window() : gain(5), count(0)
 	// running in an endless loop and which prints out "tick"
 	// every second.
 	//   	adcreader = new mcp3008Spi("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
-	//	adcreader -> start();
+	//	ADCreader t; 
+	t.start();
     
        
 }
 
 Window::~Window() {
 	// tells the thread to no longer run its endless loop
-  // adcreader->quit();
+  t.quit();
 	// wait until the run method has terminated
 //	adcreader->wait();
 //	delete adcreader;
@@ -109,11 +110,11 @@ void Window::timerEvent( QTimerEvent * )
   //int result = adcreader -> getData();
   
   //	double inVal = gain * sin( M_PI * count/50.0 );
-  // double inVal = result;//WaterValue-count; // rand()%50+1;
+  double inVal = 30; //result;//WaterValue-count; // rand()%50+1;
   
   double inVal1 = threshLow;
   double inVal2 = threshHigh;
-
+  /*
   //++count;
   mcp3008Spi a2d("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
   // int i = 20;
@@ -134,7 +135,7 @@ void Window::timerEvent( QTimerEvent * )
       // cout << "The Result is: " << a2dVal << endl;
       // i--;
       double inVal = a2dVal;
- 
+  */
   if (inVal > inVal1 && inVal < inVal2)
     {
       Label1->setText("Water level Good");
