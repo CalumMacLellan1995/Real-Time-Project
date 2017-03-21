@@ -137,7 +137,7 @@ void Window::timerEvent( QTimerEvent * )
 	plot->replot();
 	
 
-	if(inVal/inVal2 <=100)
+	if(inVal/inVal2 <=1)
 	  {// set the thermometer value
 	    bar1->setValue( inVal/inVal2 * 100 );
 	  }
@@ -145,10 +145,11 @@ void Window::timerEvent( QTimerEvent * )
 	  {
 	    bar1->setValue(100);
 	  }
+       
 
-	if(inVal <= inVal1)
+	if(inVal < inVal1)
 	  {
-	    int water();
+	    count =0;
 	  }
 }
 
