@@ -6,13 +6,17 @@ needed can be found in the Wiki we created for this project.
 
 To build:
 
+```
 cd Real-Time-Project
 qmake 
 make
+```
 
 To run (assuming you are logged into the RPI over ssh)
 
+```
 sudo startx ./QwtExample
+```
 
 
 
