@@ -4,21 +4,12 @@
 #include <cmath>
 #include "WateringThread.h"
 #include "wiringPi.h"
-// for sine stuff
-//#include "mcp3008Spi.h"
+
 
 Window::Window() : gain(5), count(0)
 {
   
-  //knob = new QwtKnob;
-	// set up the gain knob
-  //	knob->setValue(gain);
-	//gain = setGain();
-	// use the Qt signals/slots framework to update the gain -
-	// every time the knob is moved, the setGain function will be called
-  // 	connect( knob, SIGNAL(valueChanged(double)), SLOT(setGai
-
-  //	printf("hello");
+ 
 	// set up the initial plot data
 	for( int index=0; index<plotDataSize; ++index )
 	{
@@ -28,24 +19,23 @@ Window::Window() : gain(5), count(0)
 		y2Data[index]=gain-1;
 	}
 
-	//wiringPiSetup () ;
-	//pinMode (0, OUTPUT) ;
+	//Initialize curves
 	curve = new QwtPlotCurve;
 	curve->setPen(QPen(Qt::green,2));
 	curve1= new QwtPlotCurve;
 	curve1->setPen(QPen(Qt::red,2));
 	curve2 = new QwtPlotCurve;
 	curve2->setPen(QPen(Qt::blue,2));
-	
+
+	//Initialize plots, buttons, labels and progressbar
 	plot = new QwtPlot;
-	button0 = new QPushButton("Water Plants" );
 	button1 = new QPushButton("Xerophyte");
 	button2 = new QPushButton("Mesophyte");
 	button3 = new QPushButton("Hygrophyte");
 	Label1 = new QLabel(this);
 	bar1 = new QProgressBar(this);
 	
-	connect( button0, SIGNAL(clicked()), SLOT(water()));     
+	    
         connect( button1, SIGNAL(clicked()), SLOT(setThresholds()) );
 	connect( button2, SIGNAL(clicked()), SLOT(setThresholds1()) );
 	connect( button3, SIGNAL(clicked()), SLOT(setThresholds2()) );
@@ -58,41 +48,37 @@ Window::Window() : gain(5), count(0)
 	curve->setSamples(xData, yData, plotDataSize);
 	curve1->setSamples(xData,y1Data,plotDataSize);
 	curve2->setSamples(xData,y2Data,plotDataSize);
-      
+        
+	//attach curves to plot
 	curve->attach(plot);
         curve1->attach(plot);
 	curve2->attach(plot);	
 
+	//Label axis 
+	plot->setAxisTitle(QwtPlot::xBottom, "Dryness (%)");
+    	plot->setAxisTitle(QwtPlot::yLeft, "Time (x10 ms)");
 	plot->replot();
 	plot->show();
 	
-	
-	
-	// set up the layout - knob above thermometer
+	// set up the vertical and horizontal layout 
 	vLayout = new QVBoxLayout;
 	vLayout->addWidget(Label1);
-	vLayout->addWidget(button0);
+	
 	vLayout->addWidget(button1);
 	vLayout->addWidget(button2);
 	vLayout->addWidget(button3);
 
 	
-	// plot to the left of knob and thermometer
 	hLayout = new QHBoxLayout;
 	hLayout->addLayout(vLayout);
 	hLayout->addWidget(plot);
 
 	setLayout(hLayout);
 
-	// This is a demo for a thread which can be
-	// used to read from the ADC asynchronously.
-	// At the moment it doesn't do anything else than
-	// running in an endless loop and which prints out "tick"
-	// every second.
-	//   	adcreader = new mcp3008Spi("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
-	//	ADCreader t; 
+	// t.start starts the ADC thread
+	
 	t.start();
-	//d.start();
+	
     
        
 }
@@ -100,67 +86,39 @@ Window::Window() : gain(5), count(0)
 Window::~Window() {
 	// tells the thread to no longer run its endless loop
         t.quit();
-	//d.quit();
-	// wait until the run method has terminated
-//	adcreader->wait();
-//	delete t;
+	
 }
 
 void Window::timerEvent( QTimerEvent * )
 {
+  //initialize output pin
   wiringPiSetup () ;
   pinMode (1, OUTPUT) ;
   
+  //call getData() function to get data points from ADC reader thread 
   int result = t.getData();
   
-  //	double inVal = gain * sin( M_PI * count/50.0 );
-  double inVal = result;//WaterValue-count; // rand()%50+1;
+  //convert values to percetages	
+  double inVal = result/8.5;
   
-  double inVal1 = threshLow;
-  double inVal2 = threshHigh;
-  /*
-  //++count;
-  mcp3008Spi a2d("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
-  // int i = 20;
-  int a2dVal = 0;
-  int a2dChannel = 0;
-  unsigned char data[3];
-  
-      data[0] = 1;  //  first byte transmitted -> start bit
-      data[1] = 0b10000000 |( ((a2dChannel & 7) << 4)); // second byte transmitted -> (SGL/DIF = 1, D2=D1=D0=0)
-      data[2] = 0; // third byte transmitted....don't care
+  double inVal1 = threshLow/8.5;
+  double inVal2 = threshHigh/8.5;
 
-      a2d.spiWriteRead(data, sizeof(data) );
-
-      a2dVal = 0;
-      a2dVal = (data[1]<< 8) & 0b1100000000; //merge data[1] & data[2] to get result
-      a2dVal |=  (data[2] & 0xff);
-      //sleep(1);
-      // cout << "The Result is: " << a2dVal << endl;
-      // i--;
-      double inVal = a2dVal;
-  */
   
   if (inVal >= inVal2)
     {
+      //open solenoid valve when inVal > than threshold High
       digitalWrite (1, HIGH) ;
+      Label1->setText("Water Plant NOW!");
     }
   else if (inVal <= inVal1)
     {
+      //close valve to stop watering plants
       digitalWrite (1, LOW) ;
+      Label1->setText("Water level Good");
     }
  
       
-  if (inVal > inVal1 && inVal < inVal2)
-    {
-      Label1->setText("Water level Good");
-      //      Label1->setAlignment(Qt::AlignLeft);
-    }
-  else
-    {
-      Label1->setText("Water Plant NOW!");
-      // Label1->setAlignment(Qt::AlignLeft);
-    }
 	// add the new input to the plot
 	memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
 	yData[plotDataSize-1] = inVal;
@@ -174,12 +132,12 @@ void Window::timerEvent( QTimerEvent * )
 	y2Data[plotDataSize-1] = inVal2;
 	curve2->setSamples(xData, y2Data, plotDataSize);
 	
-	
+	plot->setAxisTitle(QwtPlot::xBottom, "Dryness (%)");
+    	plot->setAxisTitle(QwtPlot::yLeft, "Time (x10 ms)");
 	plot->replot();
-	
 
 	if(inVal/inVal2 <=1)
-	  {// set the thermometer value
+	  {// set the progress bar value
 	    bar1->setValue( inVal/inVal2 * 100 );
 	  }
 	else
@@ -187,39 +145,22 @@ void Window::timerEvent( QTimerEvent * )
 	    bar1->setValue(100);
 	  }
        
-	/*
-	if(inVal < inVal1)
-	  {
-	    count =0;
-	  }
-	*/
+
 }
 
-
-// this function can be used to change the gain of the A/D internal amplifier
-/*
-void Window::setGain(double gain)
-{
-//srand(time(0));
-
-//gain=rand()%50+1;
-  // for example purposes just change the amplitude of the generated input
-  
-  this->gain = gain;
-}
-*/
+//functions defining thresholds
 
 int Window::setThresholds()
 {
   
-  threshLow = 150;
+  threshLow = 150/8.5;
   return threshLow;
 }
 
 int Window::setThresholds1()
 {
  
-  threshLow = 15;
+  threshLow = 200/8.5;
   return threshLow;
   
 }
@@ -227,7 +168,7 @@ int Window::setThresholds1()
 int Window::setThresholds2()
 {
   
-  threshLow = 20;
+  threshLow = 250/8.5;
   return threshLow;
   
 }
@@ -235,7 +176,7 @@ int Window::setThresholds2()
 int Window::setThresholdsH()
 {
 
-  threshHigh = 550;
+  threshHigh = 450/8.5;
   return threshHigh;
   
 }
@@ -243,7 +184,7 @@ int Window::setThresholdsH()
 int Window::setThresholdsH1()
 {
 
-  threshHigh = 45;
+  threshHigh = 550/8.5;
   return threshHigh;
   
 }
@@ -251,12 +192,8 @@ int Window::setThresholdsH1()
 int Window::setThresholdsH2()
 {
 
-  threshHigh = 55;
+  threshHigh = 650/8.5;
   return threshHigh;
 }
 
-int Window::water()
-{
-  count = 0;
-  return count;
-}
+
