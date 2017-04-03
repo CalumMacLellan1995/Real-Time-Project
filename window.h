@@ -45,7 +45,7 @@ class Window : public QWidget
     QwtPlotCurve *curve1;
     QwtPlotCurve *curve2;
 
-    QPushButton *button0;
+    
     QPushButton *button1;
     QPushButton *button2;
     QPushButton *button3;
@@ -65,9 +65,9 @@ class Window : public QWidget
     double y1Data[plotDataSize];
     double y2Data[plotDataSize];
     
+    //Thresholds and ADC Thread instance
     int threshLow;
     int threshHigh;
-    static const int WaterValue=60;
     ADCreader t;
    
 };
