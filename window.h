@@ -11,7 +11,6 @@
 #include <QProgressBar>
 #include <QBoxLayout>
 #include "adcreader.h"
-#include "WateringThread.h"
 
 
 // class definition 'Window'
