@@ -2,7 +2,6 @@
 #include "adcreader.h"
 #include <ctime>
 #include <cmath>
-#include "WateringThread.h"
 #include "wiringPi.h"
 
 
