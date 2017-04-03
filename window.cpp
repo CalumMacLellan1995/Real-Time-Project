@@ -34,7 +34,7 @@ Window::Window() : threshLow(10), threshHigh(65)
 	Label1 = new QLabel(this);
 	bar1 = new QProgressBar(this);
 	
-	    
+	//Connect buttons to their functions    
         connect( button1, SIGNAL(clicked()), SLOT(setThresholds()) );
 	connect( button2, SIGNAL(clicked()), SLOT(setThresholds1()) );
 	connect( button3, SIGNAL(clicked()), SLOT(setThresholds2()) );
