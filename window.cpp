@@ -6,7 +6,7 @@
 #include "wiringPi.h"
 
 
-Window::Window() : gain(5), count(0)
+Window::Window() : threshLow(10), threshHigh(65)
 {
   
  
