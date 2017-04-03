@@ -4,7 +4,7 @@ course at the University of Glasgow.
 
 A detailed description of the hardware used as well as the libraries and packages needed for the code can be found in our Wiki
 
-#Making it work
+# Making it work
 
 To clone this repository:
 ```
