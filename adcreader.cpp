@@ -4,13 +4,13 @@
 #include <QDebug>
 using namespace std;
 
+//call constructor
   mcp3008Spi a2d("/dev/spidev0.0", SPI_MODE_0, 1000000, 8);
-//    int i = 60;
   int a2dVal = 0;
   int a2dChannel = 0;
   unsigned char data[3];
 
-
+//run function - infinite loop getting ADC data
 void ADCreader::run()
 {
 	running = true;
@@ -25,23 +25,18 @@ void ADCreader::run()
 	    a2dVal = 0;
             a2dVal = (data[1]<< 8) & 0b1100000000; //merge data[1] & data[2] to get result
             a2dVal |=  (data[2] & 0xff);
-	    //sleep(1);
-	    //	    cout << "The Result is: " << a2dVal << endl;
-	  //	qDebug() << "Tick";
-
-
-
-	  
-	    // sleep(1);
+	   
 	}
 }
 
+//quit function - stops infinite loop
 void ADCreader::quit()
 {
 	running = false;
 	exit(0);
 }
 
+//getData() extracts data from infinite loop when called
 int ADCreader::getData()
 {
   output = a2dVal;
