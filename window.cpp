@@ -15,8 +15,8 @@ Window::Window() : threshLow(10), threshHigh(65)
 	{
 		xData[index] = index;
 		yData[index] =10;
-		y1Data[index]=gain;
-		y2Data[index]=gain-1;
+		y1Data[index]=threshLow;
+		y2Data[index]=threshHigh;
 	}
 
 	//Initialize curves
