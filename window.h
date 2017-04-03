@@ -29,7 +29,7 @@ class Window : public QWidget
   void timerEvent( QTimerEvent * );
 
   public slots:
-    //    void setGain(double gain);
+    
     int setThresholds();
     int setThresholds1();
     int setThresholds2();
@@ -38,11 +38,9 @@ class Window : public QWidget
     int setThresholdsH1();
     int setThresholdsH2();
     
-    int water();
     // internal variables for the window class
  private:
-    //QwtKnob      *knob;
-    //QwtThermo    *thermo;
+   
     QwtPlot      *plot;
     QwtPlotCurve *curve;
     QwtPlotCurve *curve1;
@@ -68,13 +66,11 @@ class Window : public QWidget
     double y1Data[plotDataSize];
     double y2Data[plotDataSize];
     
-    double gain;
-    int count;
     int threshLow;
     int threshHigh;
     static const int WaterValue=60;
     ADCreader t;
-    WateringThread d;
+   
 };
 
 #endif // WINDOW_H
