@@ -1,5 +1,5 @@
-# Home-A-Loam an automated watering System
-This is the software for a Raspberry Pi automated watering system that we developed for the Real-Time Embedded Systems Programming
+# Home-A-Loam: an automated plant watering system (RPI project)
+This is the software for a Raspberry Pi automated plant watering system that we developed for the Real-Time Embedded Systems Programming
 course at the University of Glasgow. 
 
 A detailed description of the hardware used as well as the libraries and packages needed for the code can be found in our Wiki
