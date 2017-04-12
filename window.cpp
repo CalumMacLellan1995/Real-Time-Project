@@ -54,8 +54,8 @@ Window::Window() : threshLow(10), threshHigh(65)
 	curve2->attach(plot);	
 
 	//Label axis 
-	plot->setAxisTitle(QwtPlot::xBottom, "Dryness (%)");
-    	plot->setAxisTitle(QwtPlot::yLeft, "Time (x10 ms)");
+	plot->setAxisTitle(QwtPlot::xBottom, "Time (x10ms)");
+    	plot->setAxisTitle(QwtPlot::yLeft, "Dryness (%)");
 	plot->replot();
 	plot->show();
 	
@@ -131,8 +131,8 @@ void Window::timerEvent( QTimerEvent * )
 	y2Data[plotDataSize-1] = inVal2;
 	curve2->setSamples(xData, y2Data, plotDataSize);
 	
-	plot->setAxisTitle(QwtPlot::xBottom, "Dryness (%)");
-    	plot->setAxisTitle(QwtPlot::yLeft, "Time (x10 ms)");
+	plot->setAxisTitle(QwtPlot::xBottom, "Time (x10 ms)");
+    	plot->setAxisTitle(QwtPlot::yLeft, "Dryness (%)");
 	plot->replot();
 
 	if(inVal/inVal2 <=1)
