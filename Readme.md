@@ -20,7 +20,7 @@ make
 
 To run (assuming you are logged into the RPi over ssh and no X-server is running):
 ```
-sudo startx ./QwtExample
+sudo startx ./WateringSoftware
 ```
 
 
